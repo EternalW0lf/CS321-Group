@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RBO - Upload Data</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"> <!-- Logo and Brand Name that links to the home page -->
+      <img src="logo.png" alt="RBO Logo" class="logo" />
+      <span class="brand-name">Restaurant Budget Optimizer</span>
+    </div>
+
+    <!-- Navigation actions: Welcome text, Login/Signup buttons, and Logout button -->
+    <div class="nav-actions">
+      <span id="welcomeText" class="welcome"></span>
+
+      <button id="loginBtn" class="nav-btn" onclick="goToLogin()">Log In</button>
+      <button id="signupBtn" class="nav-btn signup" onclick="goToSignup()">Sign Up</button>
+
+      <button id="logoutBtn" class="nav-btn" onclick="logout()" style="display: none;">Sign Out</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="main-card">
+      <h1>Upload Restaurant Data</h1>
+      <p class="subtitle">
+        Upload your restaurant files to preview menu profitability insights,
+        ingredient planning, and performance trends.
+      </p>
+
+      <div class="upload-grid">
+        <div class="upload-card">
+          <div class="card-badge">Menu Data</div> <!-- Upload Section for Menu Data -->
+          <h2>Menu Data Input</h2>
+          <p>
+            Upload an Excel sheet with ingredient names, quantities needed,
+            supplier prices, or stock-related information.
+          </p>
+
+          <label for="menuInput" class="upload-btn">Choose CSV File</label>
+          <input type="file" id="menuInput" accept=".csv" hidden />
+          <p id="menuFileName" class="file-name">No file selected</p>
+        </div>
+
+        <div class="upload-card">
+          <div class="card-badge purple">Customer Stats</div> <!-- Upload Section for Customer Statistics -->
+          <h2>Customer Data Input</h2>
+          <p>
+            Upload an Excel sheet with menu performance, item sales, profit,
+            and customer demand trends over time.
+          </p>
+
+          <label for="statsInput" class="upload-btn alt">Choose CSV File</label>
+          <input type="file" id="statsInput" accept=".csv" hidden />
+          <p id="statsFileName" class="file-name">No file selected</p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="primary-btn" onclick="goToResults()">Analyze Data</button> <!-- Button to go to results page after uploading data -->
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script> <!-- JavaScript file to handle file uploads, navigation, and user authentication -->
+</body>
+</html>

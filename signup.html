@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sign Up - RBO</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="topbar"> 
+  <a href="index.html" class="brand"> <!-- Logo and Brand Name that links to the home page -->
+    <img src="logo.png" alt="RBO Logo" class="logo" />
+    <span class="brand-name">Restaurant Budget Optimizer</span>
+  </a>
+</header>
+
+<main class="page">
+  <div class="main-card small">
+    <h1>Create Account</h1>
+
+    <form onsubmit="handleSignup(event)">
+      <input type="text" id="newUser" placeholder="Username" class="input" /> <!-- Input field for new username -->
+      <input type="password" id="newPassword" placeholder="Password" class="input" /> <!-- Input field for new password -->
+
+      <button type="submit" class="primary-btn">Sign Up</button> <!-- Button to submit the signup form and trigger the handleSignup function in script.js -->
+    </form>
+
+    <p class="link-text"> Already have an account? <a href="login.html">Log in</a></p> <!-- Link to the login page for users who already have an account -->
+  </div>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
