@@ -131,3 +131,28 @@ function handleSignup(event) {
   event.preventDefault();
   signup();
 }
+
+function goToResults() {
+  const profitInput = document.getElementById("profitPercent").value;
+  const errorText = document.getElementById("profitError");
+
+  // Clear previous error
+  errorText.textContent = "";
+
+  // Check if empty
+  if (profitInput === "") {
+    errorText.textContent = "Please enter a profit percentage.";
+    return;
+  }
+
+  const value = parseFloat(profitInput);
+
+  // Check if not a number or negative
+  if (isNaN(value) || value <= 0) {
+    errorText.textContent = "Enter a valid profit percentage greater than 0.";
+    return;
+  }
+
+  // If valid → go to results
+  window.location.href = "results.html";
+}

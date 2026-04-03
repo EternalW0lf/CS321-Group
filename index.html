@@ -67,8 +67,19 @@
       </div>
 
       <div class="actions">
-        <button class="primary-btn" onclick="goToResults()">Analyze Data</button> <!-- Button to go to results page after uploading data -->
+        <input 
+          type="number" 
+          id="profitPercent" 
+          class="profit-input"
+          placeholder="Target %"
+          step="0.1"
+          min="0"
+        />
+
+        <button class="primary-btn" onclick="goToResults()">Analyze Data</button>
       </div>
+
+      <p id="profitError" class="error-text"></p>
     </section>
   </main>
 

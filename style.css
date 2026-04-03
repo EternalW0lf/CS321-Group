@@ -412,3 +412,19 @@ h1 {
   color: #4b5563;
   margin-bottom: 24px;
 }
+
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.profit-input {
+  width: 120px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+}
