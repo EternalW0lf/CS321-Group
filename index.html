@@ -39,31 +39,60 @@
       </p>
 
       <div class="upload-grid">
+
+
+
         <div class="upload-card">
-          <div class="card-badge">Menu Data</div> <!-- Upload Section for Menu Data -->
-          <h2>Menu Data Input</h2>
+          <div class="card-badge">Menu Items</div>
+          <h2>Menu Items CSV</h2>
           <p>
-            Upload an Excel sheet with ingredient names, quantities needed,
-            supplier prices, or stock-related information.
+            Upload a CSV file containing dish name, menu price, and units sold.
           </p>
 
           <label for="menuInput" class="upload-btn">Choose CSV File</label>
           <input type="file" id="menuInput" accept=".csv" hidden />
           <p id="menuFileName" class="file-name">No file selected</p>
+          <p class="csv-hint">
+            Required format: Dish Name, Menu Price, Units Sold<br>
+            Example: Chicken Bowl, 20, 150
+          </p>
         </div>
 
         <div class="upload-card">
-          <div class="card-badge purple">Customer Stats</div> <!-- Upload Section for Customer Statistics -->
-          <h2>Customer Data Input</h2>
+          <div class="card-badge purple">Ingredients</div>
+          <h2>Ingredients CSV</h2>
           <p>
-            Upload an Excel sheet with menu performance, item sales, profit,
-            and customer demand trends over time.
+            Upload a CSV file containing dish name, ingredient name, quantity needed, and unit cost.
           </p>
 
-          <label for="statsInput" class="upload-btn alt">Choose CSV File</label>
-          <input type="file" id="statsInput" accept=".csv" hidden />
-          <p id="statsFileName" class="file-name">No file selected</p>
+          <label for="ingredientsInput" class="upload-btn alt">Choose CSV File</label>
+          <input type="file" id="ingredientsInput" accept=".csv" hidden />
+          <p id="ingredientsFileName" class="file-name">No file selected</p>
+          <p class="csv-hint">
+            Required format: Dish Name, Ingredient Name, Quantity Needed, Unit Cost<br>
+            Example: Chicken Bowl, Chicken, 1, 6.00
+          </p>
         </div>
+
+
+        <div class="upload-card">
+          <div class="card-badge">Customer Trends</div>
+          <h2>Customer Data CSV</h2>
+          <p>
+            Upload a CSV file containing dish name, month, and units sold to analyze demand trends over time.
+          </p>
+
+          <label for="customerInput" class="upload-btn">Choose CSV File</label>
+          <input type="file" id="customerInput" accept=".csv" hidden />
+          <p id="customerFileName" class="file-name">No file selected</p>
+          <p class="csv-hint">
+            Required format: Dish Name, Month, Units Sold<br>
+            Example: Chicken Bowl, Jan, 40
+          </p>
+      </div>
+
+
+        
       </div>
 
       <div class="actions">
@@ -83,6 +112,8 @@
     </section>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="profitLogic.js"></script>
   <script src="script.js"></script> <!-- JavaScript file to handle file uploads, navigation, and user authentication -->
 </body>
 </html>

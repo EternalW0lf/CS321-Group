@@ -87,11 +87,20 @@ h1 {
   max-width: 760px;
 }
 
-.upload-grid,
+.upload-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(260px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.upload-card:nth-child(3) {
+  grid-column: 1 / -1;
 }
 
 .upload-card,
@@ -256,6 +265,17 @@ h1 {
 .info-card,
 .graph-card {
   margin-top: 24px;
+}
+
+.csv-hint {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  background: #f9fafb;
+  border: 1px dashed #d1d5db;
+  color: #6b7280;
+  font-size: 0.85rem;
+  line-height: 1.5;
 }
 
 .graph-header {
