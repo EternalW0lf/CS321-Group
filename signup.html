@@ -18,10 +18,9 @@
     <h1>Create Account</h1>
 
     <form onsubmit="handleSignup(event)">
-      <input type="text" id="newUser" placeholder="Username" class="input" /> <!-- Input field for new username -->
-      <input type="password" id="newPassword" placeholder="Password" class="input" /> <!-- Input field for new password -->
-
-      <button type="submit" class="primary-btn">Sign Up</button> <!-- Button to submit the signup form and trigger the handleSignup function in script.js -->
+      <input type="text" id="newUser" placeholder="Username" class="input" />
+      <input type="password" id="newPassword" placeholder="Password" class="input" />
+      <button onclick="signup()" class="primary-btn">Sign Up</button>
     </form>
 
     <p class="link-text"> Already have an account? <a href="login.html">Log in</a></p> <!-- Link to the login page for users who already have an account -->

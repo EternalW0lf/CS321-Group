@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RBO - Past Analyses</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a href="index.html" class="brand">
+      <img src="logo.png" alt="RBO Logo" class="logo" />
+      <span class="brand-name">Restaurant Budget Optimizer</span>
+    </a>
+
+    <div class="nav-actions">
+      <span id="welcomeText" class="welcome"></span>
+
+     <div class="nav-actions">
+        <button class="nav-btn" onclick="goBack()">Home</button>
+      </div>
+
+      <button id="loginBtn" class="nav-btn" onclick="goToLogin()">Log In</button>
+      <button id="signupBtn" class="nav-btn signup" onclick="goToSignup()">Sign Up</button>
+
+      <button id="logoutBtn" class="nav-btn" onclick="logout()" style="display: none;">
+        Sign Out
+      </button>
+
+
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="main-card">
+      <p class="eyebrow">Saved Work</p>
+      <h1>Past Analyses</h1>
+      <p class="subtitle">View previous analysis runs saved to your account.</p>
+
+      <div id="historyList" class="history-list"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

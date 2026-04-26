@@ -99,21 +99,34 @@ function goToSignup() {
   window.location.href = "signup.html";
 }
 
-function login() {
-  const username = document.getElementById("username").value;
-
-  if (username) {
-    localStorage.setItem("user", username);
-    window.location.href = "index.html";
-  }
-}
-
 function signup() {
   const username = document.getElementById("newUser").value;
+  const password = document.getElementById("newPassword").value;
 
-  if (username) {
+  if (!username || !password) {
+    alert("Please enter a username and password.");
+    return;
+  }
+
+  localStorage.setItem("savedUsername", username);
+  localStorage.setItem("savedPassword", password);
+  localStorage.setItem("user", username);
+
+  window.location.href = "index.html";
+}
+
+function login() {
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
+  const savedUsername = localStorage.getItem("savedUsername");
+  const savedPassword = localStorage.getItem("savedPassword");
+
+  if (username === savedUsername && password === savedPassword) {
     localStorage.setItem("user", username);
     window.location.href = "index.html";
+  } else {
+    alert("Invalid username or password.");
   }
 }
 
@@ -124,17 +137,21 @@ window.onload = function () {
   const loginBtn = document.getElementById("loginBtn");
   const signupBtn = document.getElementById("signupBtn");
   const logoutBtn = document.getElementById("logoutBtn");
+  const historyBtn = document.getElementById("historyBtn");
 
   if (user) {
     if (welcomeText) welcomeText.textContent = "Welcome, " + user;
     if (loginBtn) loginBtn.style.display = "none";
     if (signupBtn) signupBtn.style.display = "none";
     if (logoutBtn) logoutBtn.style.display = "inline-block";
+    if (historyBtn) historyBtn.style.display = "inline-block";
   } else {
     if (logoutBtn) logoutBtn.style.display = "none";
+    if (historyBtn) historyBtn.style.display = "none";
   }
 
   loadResultsPage();
+  loadHistoryPage();
 };
 
 function logout() {
@@ -253,6 +270,13 @@ function goToResults() {
               localStorage.setItem("analysisResults", JSON.stringify(analyzedResults));
               localStorage.setItem("customerData", JSON.stringify(customerData));
               localStorage.setItem("targetProfitPercent", targetPercent);
+
+              saveAnalysisHistory(analyzedResults, customerData, targetPercent, {
+                menuFile: menuFile.name,
+                ingredientsFile: ingredientsFile.name,
+                customerFile: customerFile.name
+              });
+
 
               window.location.href = "results.html";
             },
@@ -528,4 +552,98 @@ function updateTrendsDisplay() {
       monthlyTotals[topMonth] +
       " total units sold. This suggests the restaurant may need additional ingredient planning during higher-demand months.";
   }
+}
+
+
+function saveAnalysisHistory(analyzedResults, customerData, targetPercent, fileNames) {
+  const user = localStorage.getItem("user");
+
+  if (!user) {
+    return; // only save if logged in
+  }
+
+  const key = "analysisHistory_" + user;
+  const history = JSON.parse(localStorage.getItem(key)) || [];
+
+  const totalProfit = analyzedResults.reduce((sum, item) => sum + item.totalProfit, 0);
+
+  const topItem = analyzedResults.reduce((best, item) =>
+    item.totalProfit > best.totalProfit ? item : best
+  );
+
+  const analysis = {
+    id: Date.now(),
+    date: new Date().toLocaleString(),
+    targetPercent: targetPercent,
+    totalProfit: totalProfit,
+    topItem: topItem.dishName,
+    fileNames: fileNames,
+    results: analyzedResults,
+    customerData: customerData
+  };
+
+  history.push(analysis);
+
+  localStorage.setItem(key, JSON.stringify(history));
+}
+
+function goToHistory() {
+  window.location.href = "history.html";
+}
+
+function loadHistoryPage() {
+  const historyList = document.getElementById("historyList");
+  if (!historyList) return;
+
+  const user = localStorage.getItem("user");
+
+  if (!user) {
+    historyList.innerHTML = "<p>Please log in to view past analyses.</p>";
+    return;
+  }
+
+  const key = "analysisHistory_" + user;
+  const history = JSON.parse(localStorage.getItem(key)) || [];
+
+  if (history.length === 0) {
+    historyList.innerHTML = "<p>No past analyses saved yet.</p>";
+    return;
+  }
+
+  historyList.innerHTML = "";
+
+  history.forEach((analysis) => {
+    const card = document.createElement("div");
+    card.className = "info-card";
+
+    card.innerHTML = `
+      <h2>${analysis.date}</h2>
+      <p><strong>Target Profit:</strong> ${analysis.targetPercent}%</p>
+      <p><strong>Total Profit:</strong> $${analysis.totalProfit.toFixed(2)}</p>
+      <p><strong>Top Item:</strong> ${analysis.topItem}</p>
+      <p><strong>Files:</strong> ${analysis.fileNames.menuFile}, ${analysis.fileNames.ingredientsFile}, ${analysis.fileNames.customerFile}</p>
+      <button class="primary-btn" onclick="loadSavedAnalysis(${analysis.id})">View Analysis</button>
+    `;
+
+    historyList.appendChild(card);
+  });
+}
+
+function loadSavedAnalysis(id) {
+  const user = localStorage.getItem("user");
+  const key = "analysisHistory_" + user;
+  const history = JSON.parse(localStorage.getItem(key)) || [];
+
+  const selected = history.find(item => item.id === id);
+
+  if (!selected) {
+    alert("Saved analysis not found.");
+    return;
+  }
+
+  localStorage.setItem("analysisResults", JSON.stringify(selected.results));
+  localStorage.setItem("customerData", JSON.stringify(selected.customerData));
+  localStorage.setItem("targetProfitPercent", selected.targetPercent);
+
+  window.location.href = "results.html";
 }
