@@ -9,6 +9,13 @@ A web-based MVP that allows restaurant managers to upload data, input profit goa
 - View results dashboard
 - Login / Signup UI
 
+## Features (Sprint 2 MVP)
+
+- Dynamic results dashboard (overview, per-item insights, trends)
+- Login / Signup (localStorage-based session)
+- User-specific analysis history (saved and reloadable)
+- CSV validation for correct format
+
 ## How to Run
 Download the repository and open index.html in a web browser.
 
