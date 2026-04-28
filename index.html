@@ -8,12 +8,11 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="brand"> <!-- Logo and Brand Name that links to the home page -->
+    <div class="brand">
       <img src="logo.png" alt="RBO Logo" class="logo" />
       <span class="brand-name">Restaurant Budget Optimizer</span>
     </div>
 
-    <!-- Navigation actions: Welcome text, Login/Signup buttons, and Logout button -->
     <div class="nav-actions">
       <span id="welcomeText" class="welcome"></span>
 
@@ -23,15 +22,13 @@
       <button id="signupBtn" class="nav-btn signup" onclick="goToSignup()">Sign Up</button>
 
       <button id="logoutBtn" class="nav-btn" onclick="logout()" style="display: none;">Sign Out</button>
-
     </div>
   </header>
 
   <main class="page">
-
     <section class="intro">
       <h1>Welcome to Restaurant Budget Optimizer</h1>
-      <p> Analyze your menu costs, optimize pricing, and improve profitability with data-driven insights.</p>
+      <p>Analyze your menu costs, optimize pricing, and improve profitability with data-driven insights.</p>
     </section>
 
     <section id="uploadSection" class="main-card">
@@ -43,8 +40,7 @@
 
       <div class="upload-grid">
 
-
-
+        <!-- Menu Items Card -->
         <div class="upload-card">
           <div class="card-badge">Menu Items</div>
           <h2>Menu Items CSV</h2>
@@ -55,12 +51,18 @@
           <label for="menuInput" class="upload-btn">Choose CSV File</label>
           <input type="file" id="menuInput" accept=".csv" hidden />
           <p id="menuFileName" class="file-name">No file selected</p>
+
           <p class="csv-hint">
             Required format: Dish Name, Menu Price, Units Sold<br>
             Example: Chicken Bowl, 20, 150
           </p>
+
+          <button type="button" class="add-row-btn" onclick="addMenuRow()">+ Add Menu Item Manually</button>
+
+          <div id="manualMenuRows" class="manual-rows"></div>
         </div>
 
+        <!-- Ingredients Card -->
         <div class="upload-card">
           <div class="card-badge purple">Ingredients</div>
           <h2>Ingredients CSV</h2>
@@ -71,13 +73,18 @@
           <label for="ingredientsInput" class="upload-btn alt">Choose CSV File</label>
           <input type="file" id="ingredientsInput" accept=".csv" hidden />
           <p id="ingredientsFileName" class="file-name">No file selected</p>
+
           <p class="csv-hint">
             Required format: Dish Name, Ingredient Name, Quantity Needed, Unit Cost<br>
             Example: Chicken Bowl, Chicken, 1, 6.00
           </p>
+
+          <button type="button" class="add-row-btn" onclick="addIngredientRow()">+ Add Ingredient Manually</button>
+
+          <div id="manualIngredientRows" class="manual-rows"></div>
         </div>
 
-
+        <!-- Customer Trends Card -->
         <div class="upload-card">
           <div class="card-badge">Customer Trends</div>
           <h2>Customer Data CSV</h2>
@@ -88,14 +95,17 @@
           <label for="customerInput" class="upload-btn">Choose CSV File</label>
           <input type="file" id="customerInput" accept=".csv" hidden />
           <p id="customerFileName" class="file-name">No file selected</p>
+
           <p class="csv-hint">
             Required format: Dish Name, Month, Units Sold<br>
             Example: Chicken Bowl, Jan, 40
           </p>
-      </div>
 
+          <button type="button" class="add-row-btn" onclick="addCustomerRow()">+ Add Customer Data Manually</button>
 
-        
+          <div id="manualCustomerRows" class="manual-rows"></div>
+        </div>
+
       </div>
 
       <div class="actions">
@@ -117,6 +127,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="profitLogic.js"></script>
-  <script src="script.js"></script> <!-- JavaScript file to handle file uploads, navigation, and user authentication -->
+  <script src="script.js"></script>
 </body>
 </html>

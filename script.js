@@ -192,6 +192,7 @@ function validateCSVData(data, requiredHeaders, fileType, errorText) {
   return true;
 }
 
+<<<<<<< HEAD
 function goToResults() {
   const profitInput = document.getElementById("profitPercent").value;
   const errorText = document.getElementById("profitError");
@@ -201,6 +202,91 @@ function goToResults() {
   }
 
   if (profitInput === "") {
+=======
+function getManualMenuData() {
+  const rows = document.querySelectorAll("#manualMenuRows .manual-row");
+  const menuData = [];
+
+  rows.forEach(row => {
+    const dishName = row.querySelector(".manual-menu-dish").value.trim();
+    const menuPrice = row.querySelector(".manual-menu-price").value.trim();
+    const unitsSold = row.querySelector(".manual-menu-units").value.trim();
+
+    if (dishName && menuPrice && unitsSold) {
+      menuData.push({
+        "Dish Name": dishName,
+        "Menu Price": menuPrice,
+        "Units Sold": unitsSold
+      });
+    }
+  });
+
+  return menuData;
+}
+
+function getManualIngredientData() {
+  const rows = document.querySelectorAll("#manualIngredientRows .manual-row");
+  const ingredientData = [];
+
+  rows.forEach(row => {
+    const dishName = row.querySelector(".manual-ingredient-dish").value.trim();
+    const ingredientName = row.querySelector(".manual-ingredient-name").value.trim();
+    const quantityNeeded = row.querySelector(".manual-ingredient-quantity").value.trim();
+    const unitCost = row.querySelector(".manual-ingredient-cost").value.trim();
+
+    if (dishName && ingredientName && quantityNeeded && unitCost) {
+      ingredientData.push({
+        "Dish Name": dishName,
+        "Ingredient Name": ingredientName,
+        "Quantity Needed": quantityNeeded,
+        "Unit Cost": unitCost
+      });
+    }
+  });
+
+  return ingredientData;
+}
+
+function getManualCustomerData() {
+  const rows = document.querySelectorAll("#manualCustomerRows .manual-row");
+  const customerData = [];
+
+  rows.forEach(row => {
+    const dishName = row.querySelector(".manual-customer-dish").value.trim();
+    const month = row.querySelector(".manual-customer-month").value.trim();
+    const unitsSold = row.querySelector(".manual-customer-units").value.trim();
+
+    if (dishName && month && unitsSold) {
+      customerData.push({
+        "Dish Name": dishName,
+        "Month": month,
+        "Units Sold": unitsSold
+      });
+    }
+  });
+
+  return customerData;
+}
+
+function parseCSVFile(file) {
+  return new Promise((resolve, reject) => {
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: results => resolve(results.data),
+      error: () => reject()
+    });
+  });
+}
+
+async function goToResults() {
+  const profitInput = document.getElementById("profitPercent").value;
+  const errorText = document.getElementById("profitError");
+
+  errorText.textContent = "";
+
+  if (!profitInput) {
+>>>>>>> e9e2e18424d2e3745f57077b2cdf0072a4fb5194
     errorText.textContent = "Please enter a profit percentage.";
     return;
   }
@@ -208,6 +294,7 @@ function goToResults() {
   const targetPercent = parseFloat(profitInput);
 
   if (isNaN(targetPercent) || targetPercent <= 0) {
+<<<<<<< HEAD
     errorText.textContent = "Enter a valid profit percentage greater than 0.";
     return;
   }
@@ -294,6 +381,60 @@ function goToResults() {
       errorText.textContent = "Failed to read the menu items CSV file.";
     }
   });
+=======
+    errorText.textContent = "Enter a valid profit percentage.";
+    return;
+  }
+
+  let menuData = getManualMenuData();
+  let ingredientsData = getManualIngredientData();
+  let customerData = getManualCustomerData();
+
+  try {
+    if (menuInput.files.length > 0) {
+      const csv = await parseCSVFile(menuInput.files[0]);
+      menuData = menuData.concat(csv);
+    }
+
+    if (ingredientsInput.files.length > 0) {
+      const csv = await parseCSVFile(ingredientsInput.files[0]);
+      ingredientsData = ingredientsData.concat(csv);
+    }
+
+    if (customerInput.files.length > 0) {
+      const csv = await parseCSVFile(customerInput.files[0]);
+      customerData = customerData.concat(csv);
+    }
+  } catch {
+    errorText.textContent = "CSV read error.";
+    return;
+  }
+
+  if (!menuData.length) {
+    errorText.textContent = "Add menu data.";
+    return;
+  }
+
+  if (!ingredientsData.length) {
+    errorText.textContent = "Add ingredient data.";
+    return;
+  }
+
+  if (!customerData.length) {
+    errorText.textContent = "Add customer data.";
+    return;
+  }
+
+  const analyzedResults = menuData.map(item =>
+    analyzeMenuItem(item, ingredientsData, targetPercent)
+  );
+
+  localStorage.setItem("analysisResults", JSON.stringify(analyzedResults));
+  localStorage.setItem("customerData", JSON.stringify(customerData));
+  localStorage.setItem("targetProfitPercent", targetPercent);
+
+  window.location.href = "results.html";
+>>>>>>> e9e2e18424d2e3745f57077b2cdf0072a4fb5194
 }
 
 function loadResultsPage() {
@@ -646,4 +787,55 @@ function loadSavedAnalysis(id) {
   localStorage.setItem("targetProfitPercent", selected.targetPercent);
 
   window.location.href = "results.html";
+<<<<<<< HEAD
+=======
+}
+function addMenuRow() {
+  const container = document.getElementById("manualMenuRows");
+
+  const row = document.createElement("div");
+  row.className = "manual-row";
+
+  row.innerHTML = `
+    <input type="text" placeholder="Dish Name" class="manual-menu-dish" />
+    <input type="number" placeholder="Menu Price" class="manual-menu-price" step="0.01" min="0" />
+    <input type="number" placeholder="Units Sold" class="manual-menu-units" min="0" />
+    <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">Remove</button>
+  `;
+
+  container.appendChild(row);
+}
+
+function addIngredientRow() {
+  const container = document.getElementById("manualIngredientRows");
+
+  const row = document.createElement("div");
+  row.className = "manual-row ingredient-row";
+
+  row.innerHTML = `
+    <input type="text" placeholder="Dish Name" class="manual-ingredient-dish" />
+    <input type="text" placeholder="Ingredient Name" class="manual-ingredient-name" />
+    <input type="number" placeholder="Quantity Needed" class="manual-ingredient-quantity" step="0.01" min="0" />
+    <input type="number" placeholder="Unit Cost" class="manual-ingredient-cost" step="0.01" min="0" />
+    <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">Remove</button>
+  `;
+
+  container.appendChild(row);
+}
+
+function addCustomerRow() {
+  const container = document.getElementById("manualCustomerRows");
+
+  const row = document.createElement("div");
+  row.className = "manual-row";
+
+  row.innerHTML = `
+    <input type="text" placeholder="Dish Name" class="manual-customer-dish" />
+    <input type="text" placeholder="Month" class="manual-customer-month" />
+    <input type="number" placeholder="Units Sold" class="manual-customer-units" min="0" />
+    <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">Remove</button>
+  `;
+
+  container.appendChild(row);
+>>>>>>> e9e2e18424d2e3745f57077b2cdf0072a4fb5194
 }
