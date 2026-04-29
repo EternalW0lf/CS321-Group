@@ -878,3 +878,93 @@ function removeCustomerFile() {
   customerFileName.textContent = "No file selected";
 }
 
+function loadSampleData() {
+  const manualMenuRows = document.getElementById("manualMenuRows");
+  const manualIngredientRows = document.getElementById("manualIngredientRows");
+  const manualCustomerRows = document.getElementById("manualCustomerRows");
+  const profitPercent = document.getElementById("profitPercent");
+
+  if (!manualMenuRows || !manualIngredientRows || !manualCustomerRows) {
+    return;
+  }
+
+  manualMenuRows.innerHTML = "";
+  manualIngredientRows.innerHTML = "";
+  manualCustomerRows.innerHTML = "";
+
+  const sampleMenuItems = [
+    { dish: "Chicken Bowl", price: 20, units: 150 },
+    { dish: "Steak Tacos", price: 18, units: 95 },
+    { dish: "Veggie Pasta", price: 15, units: 70 }
+  ];
+
+  const sampleIngredients = [
+    { dish: "Chicken Bowl", ingredient: "Chicken", quantity: 1, cost: 6.00 },
+    { dish: "Chicken Bowl", ingredient: "Rice", quantity: 1, cost: 2.00 },
+    { dish: "Steak Tacos", ingredient: "Steak", quantity: 1, cost: 7.50 },
+    { dish: "Steak Tacos", ingredient: "Tortilla", quantity: 2, cost: 1.00 },
+    { dish: "Veggie Pasta", ingredient: "Pasta", quantity: 1, cost: 2.50 },
+    { dish: "Veggie Pasta", ingredient: "Vegetables", quantity: 1, cost: 3.00 }
+  ];
+
+  const sampleCustomerData = [
+    { dish: "Chicken Bowl", month: "Jan", units: 40 },
+    { dish: "Chicken Bowl", month: "Feb", units: 55 },
+    { dish: "Chicken Bowl", month: "Mar", units: 60 },
+    { dish: "Steak Tacos", month: "Jan", units: 30 },
+    { dish: "Steak Tacos", month: "Feb", units: 35 },
+    { dish: "Steak Tacos", month: "Mar", units: 30 },
+    { dish: "Veggie Pasta", month: "Jan", units: 20 },
+    { dish: "Veggie Pasta", month: "Feb", units: 25 },
+    { dish: "Veggie Pasta", month: "Mar", units: 25 }
+  ];
+
+  sampleMenuItems.forEach(item => {
+    const row = document.createElement("div");
+    row.className = "manual-row";
+
+    row.innerHTML = `
+      <input type="text" placeholder="Dish Name" class="manual-menu-dish" value="${item.dish}" />
+      <input type="number" placeholder="Menu Price" class="manual-menu-price" step="0.01" min="0" value="${item.price}" />
+      <input type="number" placeholder="Units Sold" class="manual-menu-units" min="0" value="${item.units}" />
+      <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">Remove</button>
+    `;
+
+    manualMenuRows.appendChild(row);
+  });
+
+  sampleIngredients.forEach(item => {
+    const row = document.createElement("div");
+    row.className = "manual-row ingredient-row";
+
+    row.innerHTML = `
+      <input type="text" placeholder="Dish Name" class="manual-ingredient-dish" value="${item.dish}" />
+      <input type="text" placeholder="Ingredient Name" class="manual-ingredient-name" value="${item.ingredient}" />
+      <input type="number" placeholder="Quantity Needed" class="manual-ingredient-quantity" step="0.01" min="0" value="${item.quantity}" />
+      <input type="number" placeholder="Unit Cost" class="manual-ingredient-cost" step="0.01" min="0" value="${item.cost}" />
+      <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">Remove</button>
+    `;
+
+    manualIngredientRows.appendChild(row);
+  });
+
+  sampleCustomerData.forEach(item => {
+    const row = document.createElement("div");
+    row.className = "manual-row";
+
+    row.innerHTML = `
+      <input type="text" placeholder="Dish Name" class="manual-customer-dish" value="${item.dish}" />
+      <input type="text" placeholder="Month" class="manual-customer-month" value="${item.month}" />
+      <input type="number" placeholder="Units Sold" class="manual-customer-units" min="0" value="${item.units}" />
+      <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">Remove</button>
+    `;
+
+    manualCustomerRows.appendChild(row);
+  });
+
+  if (profitPercent) {
+    profitPercent.value = 30;
+  }
+
+  alert("Sample restaurant data has been loaded.");
+}
