@@ -766,3 +766,36 @@ function addCustomerRow() {
 
   container.appendChild(row);
 }
+function clearAllInputs() {
+  const menuInput = document.getElementById("menuInput");
+  const ingredientsInput = document.getElementById("ingredientsInput");
+  const customerInput = document.getElementById("customerInput");
+
+  const menuFileName = document.getElementById("menuFileName");
+  const ingredientsFileName = document.getElementById("ingredientsFileName");
+  const customerFileName = document.getElementById("customerFileName");
+
+  const profitPercent = document.getElementById("profitPercent");
+  const profitError = document.getElementById("profitError");
+
+  const manualMenuRows = document.getElementById("manualMenuRows");
+  const manualIngredientRows = document.getElementById("manualIngredientRows");
+  const manualCustomerRows = document.getElementById("manualCustomerRows");
+
+  if (menuInput) menuInput.value = "";
+  if (ingredientsInput) ingredientsInput.value = "";
+  if (customerInput) customerInput.value = "";
+
+  if (menuFileName) menuFileName.textContent = "No file selected";
+  if (ingredientsFileName) ingredientsFileName.textContent = "No file selected";
+  if (customerFileName) customerFileName.textContent = "No file selected";
+
+  if (profitPercent) profitPercent.value = "";
+  if (profitError) profitError.textContent = "";
+
+  if (manualMenuRows) manualMenuRows.innerHTML = "";
+  if (manualIngredientRows) manualIngredientRows.innerHTML = "";
+  if (manualCustomerRows) manualCustomerRows.innerHTML = "";
+
+  alert("All input data has been cleared.");
+}
