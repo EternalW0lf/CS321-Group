@@ -2,22 +2,16 @@
   box-sizing: border-box;
 }
 
-<<<<<<< HEAD
-=======
 html, body {
   height: 100%;
 }
 
->>>>>>> e9e2e18424d2e3745f57077b2cdf0072a4fb5194
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   background: linear-gradient(135deg, #f4f7fb 0%, #eef2ff 45%, #fdfcff 100%);
   color: #1f2937;
-<<<<<<< HEAD
-=======
   min-height: 100vh;
->>>>>>> e9e2e18424d2e3745f57077b2cdf0072a4fb5194
 }
 
 .topbar {
@@ -57,35 +51,21 @@ body {
 }
 
 .page {
-<<<<<<< HEAD
-  min-height: calc(100vh - 75px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 38px 18px;
-=======
   min-height: 100%;
   padding: 40px 18px 80px; 
->>>>>>> e9e2e18424d2e3745f57077b2cdf0072a4fb5194
 }
 
 .main-card {
   width: 100%;
   max-width: 1150px;
-<<<<<<< HEAD
-=======
   margin: 0 auto; 
 
->>>>>>> e9e2e18424d2e3745f57077b2cdf0072a4fb5194
   background: rgba(255, 255, 255, 0.94);
   border: 1px solid #e5e7eb;
   border-radius: 28px;
   padding: 38px;
   box-shadow: 0 24px 60px rgba(17, 24, 39, 0.08);
-<<<<<<< HEAD
-=======
  
->>>>>>> e9e2e18424d2e3745f57077b2cdf0072a4fb5194
 }
 
 .eyebrow {
@@ -118,8 +98,6 @@ h1 {
   gap: 20px;
 }
 
-<<<<<<< HEAD
-=======
 
 
 .upload-card {
@@ -162,7 +140,6 @@ h1 {
 
 
 
->>>>>>> e9e2e18424d2e3745f57077b2cdf0072a4fb5194
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -527,8 +504,6 @@ h1 {
 
 .welcome {
   margin-right: 20px;
-<<<<<<< HEAD
-=======
 }
 .add-row-btn {
   margin-top: 12px;
@@ -564,5 +539,4 @@ h1 {
 
 .remove-row-btn:hover {
   opacity: 0.9;
->>>>>>> e9e2e18424d2e3745f57077b2cdf0072a4fb5194
 }

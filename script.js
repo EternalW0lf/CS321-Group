@@ -192,17 +192,6 @@ function validateCSVData(data, requiredHeaders, fileType, errorText) {
   return true;
 }
 
-<<<<<<< HEAD
-function goToResults() {
-  const profitInput = document.getElementById("profitPercent").value;
-  const errorText = document.getElementById("profitError");
-
-  if (errorText) {
-    errorText.textContent = "";
-  }
-
-  if (profitInput === "") {
-=======
 function getManualMenuData() {
   const rows = document.querySelectorAll("#manualMenuRows .manual-row");
   const menuData = [];
@@ -286,7 +275,6 @@ async function goToResults() {
   errorText.textContent = "";
 
   if (!profitInput) {
->>>>>>> e9e2e18424d2e3745f57077b2cdf0072a4fb5194
     errorText.textContent = "Please enter a profit percentage.";
     return;
   }
@@ -294,94 +282,6 @@ async function goToResults() {
   const targetPercent = parseFloat(profitInput);
 
   if (isNaN(targetPercent) || targetPercent <= 0) {
-<<<<<<< HEAD
-    errorText.textContent = "Enter a valid profit percentage greater than 0.";
-    return;
-  }
-
-  if (!menuInput || menuInput.files.length === 0) {
-    errorText.textContent = "Please upload a menu items CSV file.";
-    return;
-  }
-
-  if (!ingredientsInput || ingredientsInput.files.length === 0) {
-    errorText.textContent = "Please upload an ingredients CSV file.";
-    return;
-  }
-
-  if (!customerInput || customerInput.files.length === 0) {
-    errorText.textContent = "Please upload a customer data CSV file.";
-    return;
-  }
-
-  const menuFile = menuInput.files[0];
-  const ingredientsFile = ingredientsInput.files[0];
-  const customerFile = customerInput.files[0];
-
-  Papa.parse(menuFile, {
-    header: true,
-    skipEmptyLines: true,
-    complete: function(menuResults) {
-      Papa.parse(ingredientsFile, {
-        header: true,
-        skipEmptyLines: true,
-        complete: function(ingredientsResults) {
-          Papa.parse(customerFile, {
-            header: true,
-            skipEmptyLines: true,
-            complete: function(customerResults) {
-              const menuData = menuResults.data;
-              const ingredientsData = ingredientsResults.data;
-              const customerData = customerResults.data;
-
-              const menuHeaders = ["Dish Name", "Menu Price", "Units Sold"];
-              const ingredientHeaders = ["Dish Name", "Ingredient Name", "Quantity Needed", "Unit Cost"];
-              const customerHeaders = ["Dish Name", "Month", "Units Sold"];
-
-              if (!validateCSVData(menuData, menuHeaders, "Menu Items", errorText)) {
-                return;
-              }
-
-              if (!validateCSVData(ingredientsData, ingredientHeaders, "Ingredients", errorText)) {
-                return;
-              }
-
-              if (!validateCSVData(customerData, customerHeaders, "Customer Data", errorText)) {
-                return;
-              }
-
-              const analyzedResults = menuData.map(menuItem =>
-                analyzeMenuItem(menuItem, ingredientsData, targetPercent)
-              );
-
-              localStorage.setItem("analysisResults", JSON.stringify(analyzedResults));
-              localStorage.setItem("customerData", JSON.stringify(customerData));
-              localStorage.setItem("targetProfitPercent", targetPercent);
-
-              saveAnalysisHistory(analyzedResults, customerData, targetPercent, {
-                menuFile: menuFile.name,
-                ingredientsFile: ingredientsFile.name,
-                customerFile: customerFile.name
-              });
-
-
-              window.location.href = "results.html";
-            },
-            error: function() {
-              errorText.textContent = "Failed to read the customer data CSV file.";
-            }
-          });
-        },
-        error: function() {
-          errorText.textContent = "Failed to read the ingredients CSV file.";
-        }
-      });
-    },
-    error: function() {
-      errorText.textContent = "Failed to read the menu items CSV file.";
-    }
-  });
-=======
     errorText.textContent = "Enter a valid profit percentage.";
     return;
   }
@@ -429,12 +329,21 @@ async function goToResults() {
     analyzeMenuItem(item, ingredientsData, targetPercent)
   );
 
+  const fileNames = {
+  menuFile: menuInput.files.length ? menuInput.files[0].name : "Manual Entry",
+  ingredientsFile: ingredientsInput.files.length ? ingredientsInput.files[0].name : "Manual Entry",
+  customerFile: customerInput.files.length ? customerInput.files[0].name : "Manual Entry"
+};
+
   localStorage.setItem("analysisResults", JSON.stringify(analyzedResults));
   localStorage.setItem("customerData", JSON.stringify(customerData));
   localStorage.setItem("targetProfitPercent", targetPercent);
 
+  saveAnalysisHistory(analyzedResults, customerData, targetPercent, fileNames);
+
+
+
   window.location.href = "results.html";
->>>>>>> e9e2e18424d2e3745f57077b2cdf0072a4fb5194
 }
 
 function loadResultsPage() {
@@ -723,7 +632,7 @@ function saveAnalysisHistory(analyzedResults, customerData, targetPercent, fileN
     customerData: customerData
   };
 
-  history.push(analysis);
+  history.unshift(analysis);
 
   localStorage.setItem(key, JSON.stringify(history));
 }
@@ -763,8 +672,16 @@ function loadHistoryPage() {
       <p><strong>Total Profit:</strong> $${analysis.totalProfit.toFixed(2)}</p>
       <p><strong>Top Item:</strong> ${analysis.topItem}</p>
       <p><strong>Files:</strong> ${analysis.fileNames.menuFile}, ${analysis.fileNames.ingredientsFile}, ${analysis.fileNames.customerFile}</p>
-      <button class="primary-btn" onclick="loadSavedAnalysis(${analysis.id})">View Analysis</button>
-    `;
+      <div style="display:flex; gap:10px; margin-top:10px;">
+    <button class="primary-btn" onclick="loadSavedAnalysis(${analysis.id})">
+      View Analysis
+    </button>
+
+    <button class="remove-row-btn" onclick="deleteHistoryItem(${analysis.id})">
+      Delete
+    </button>
+  </div>
+`;;
 
     historyList.appendChild(card);
   });
@@ -787,8 +704,19 @@ function loadSavedAnalysis(id) {
   localStorage.setItem("targetProfitPercent", selected.targetPercent);
 
   window.location.href = "results.html";
-<<<<<<< HEAD
-=======
+}
+
+function deleteHistoryItem(id){
+    const user=localStorage.getItem("user");
+    if(!user) return;
+
+    const key="analysisHistory_" + user;
+    let history=JSON.parse(localStorage.getItem(key)) || {};
+
+    history=history.filter(item=>item.id !==id);
+
+    localStorage.setItem(key,JSON.stringify(history));
+    loadHistoryPage();
 }
 function addMenuRow() {
   const container = document.getElementById("manualMenuRows");
@@ -837,5 +765,4 @@ function addCustomerRow() {
   `;
 
   container.appendChild(row);
->>>>>>> e9e2e18424d2e3745f57077b2cdf0072a4fb5194
 }
