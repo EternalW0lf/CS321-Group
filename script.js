@@ -11,18 +11,12 @@ const customerFileName = document.getElementById("customerFileName");
 // Add event listeners for the Menu Data file input, ensuring only CSV files are accepted and updating the displayed file name accordingly
 if (menuInput) {
   menuInput.addEventListener("change", function () {
-    if (menuInput.files.length > 0) {
-      const file = menuInput.files[0];
-      const name = file.name.toLowerCase();
+    const file = menuInput.files[0];
+    const removeBtn = document.getElementById("removeMenuBtn");
 
-      if (!name.endsWith(".csv")) {
-        alert("Please upload a CSV file (.csv) for menu data.");
-        menuInput.value = "";
-        menuFileName.textContent = "No file selected";
-        return;
-      }
-
-      menuFileName.textContent = "Uploaded: " + file.name;
+    if (file) {
+      menuFileName.textContent = file.name;
+      removeBtn.style.display = "inline-block";
     }
   });
 }
@@ -30,18 +24,12 @@ if (menuInput) {
 // Add event listener for the customer statistics file input, ensuring only CSV files are accepted and updating the displayed file name accordingly
 if (ingredientsInput) {
   ingredientsInput.addEventListener("change", function () {
-    if (ingredientsInput.files.length > 0) {
-      const file = ingredientsInput.files[0];
-      const name = file.name.toLowerCase();
+    const file = ingredientsInput.files[0];
+    const removeBtn = document.getElementById("removeIngredientsBtn");
 
-      if (!name.endsWith(".csv")) {
-        alert("Please upload a CSV file (.csv) for ingredients data.");
-        ingredientsInput.value = "";
-        ingredientsFileName.textContent = "No file selected";
-        return;
-      }
-
-      ingredientsFileName.textContent = "Uploaded: " + file.name;
+    if (file) {
+      ingredientsFileName.textContent = file.name;
+      removeBtn.style.display = "inline-block";
     }
   });
 }
@@ -49,18 +37,12 @@ if (ingredientsInput) {
 
 if (customerInput) {
   customerInput.addEventListener("change", function () {
-    if (customerInput.files.length > 0) {
-      const file = customerInput.files[0];
-      const name = file.name.toLowerCase();
+    const file = customerInput.files[0];
+    const removeBtn = document.getElementById("removeCustomerBtn");
 
-      if (!name.endsWith(".csv")) {
-        alert("Please upload a CSV file (.csv) for customer data.");
-        customerInput.value = "";
-        customerFileName.textContent = "No file selected";
-        return;
-      }
-
-      customerFileName.textContent = "Uploaded: " + file.name;
+    if (file) {
+      customerFileName.textContent = file.name;
+      removeBtn.style.display = "inline-block";
     }
   });
 }
@@ -270,6 +252,8 @@ function parseCSVFile(file) {
 
 async function goToResults() {
   const profitInput = document.getElementById("profitPercent").value;
+  const analysisNameInput = document.getElementById("analysisName").value.trim();
+  const analysisName = analysisNameInput || "Untitled Analysis";
   const errorText = document.getElementById("profitError");
 
   errorText.textContent = "";
@@ -346,9 +330,11 @@ async function goToResults() {
 
   localStorage.setItem("analysisResults", JSON.stringify(analyzedResults));
   localStorage.setItem("customerData", JSON.stringify(customerData));
+  localStorage.setItem("ingredientsData", JSON.stringify(ingredientsData));
   localStorage.setItem("targetProfitPercent", targetPercent);
+  localStorage.setItem("analysisName", analysisName);
 
-  saveAnalysisHistory(analyzedResults, customerData, targetPercent, fileNames);
+  saveAnalysisHistory(analyzedResults, customerData, targetPercent, fileNames, analysisName);
 
 
 
@@ -507,6 +493,62 @@ function updateMenuItemDisplay(item) {
     }
   }
 
+  const targetFeedbackText = document.getElementById("targetFeedbackText");
+  const targetPercent = parseFloat(localStorage.getItem("targetProfitPercent"));
+
+  if (targetFeedbackText && !isNaN(targetPercent)) {
+    if (item.margin > targetPercent) {
+      targetFeedbackText.textContent =
+        "Above Target: This item is performing well because its profit margin is higher than the target of " +
+        targetPercent +
+        "%.";
+    } else if (item.margin === targetPercent) {
+        targetFeedbackText.textContent =
+          "Meets Target: This item is exactly meeting the target profit margin of " +
+          targetPercent +
+          "%.";
+    } else {
+        targetFeedbackText.textContent =
+          "Below Target: This item is below the target margin of " +
+        targetPercent +
+        "%. Consider increasing the price or reducing ingredient costs.";
+    }
+  }
+
+  const costBreakdownList = document.getElementById("costBreakdownList");
+  const storedIngredients = JSON.parse(localStorage.getItem("ingredientsData")) || [];
+
+  if (costBreakdownList) {
+    const ingredientsForDish = storedIngredients.filter(
+      ingredient => ingredient["Dish Name"] === item.dishName
+    );
+
+    if (ingredientsForDish.length === 0) {
+      costBreakdownList.innerHTML = "<p>No ingredient details available.</p>";
+    } else {
+      let html = "";
+
+      ingredientsForDish.forEach((ingredient) => {
+        const name = ingredient["Ingredient Name"];
+        const quantity = parseFloat(ingredient["Quantity Needed"]);
+        const unitCost = parseFloat(ingredient["Unit Cost"]);
+        const totalCost = quantity * unitCost;
+
+        html += `
+          <p>
+            <strong>${name}</strong>: 
+            ${quantity} × $${unitCost.toFixed(2)} = 
+            $${totalCost.toFixed(2)}
+          </p>
+        `;
+      });
+
+      html += `<p><strong>Total Dish Cost:</strong> $${item.cost.toFixed(2)}</p>`;
+
+      costBreakdownList.innerHTML = html;
+    }
+  }
+
 }
 
 function updateOverviewDisplay(results) {
@@ -631,7 +673,7 @@ function updateTrendsDisplay() {
 }
 
 
-function saveAnalysisHistory(analyzedResults, customerData, targetPercent, fileNames) {
+function saveAnalysisHistory(analyzedResults, customerData, targetPercent, fileNames, analysisName) {
   const user = localStorage.getItem("user");
 
   if (!user) {
@@ -650,12 +692,14 @@ function saveAnalysisHistory(analyzedResults, customerData, targetPercent, fileN
   const analysis = {
     id: Date.now(),
     date: new Date().toLocaleString(),
+    name: analysisName,
     targetPercent: targetPercent,
     totalProfit: totalProfit,
     topItem: topItem.dishName,
     fileNames: fileNames,
     results: analyzedResults,
-    customerData: customerData
+    customerData: customerData,
+    ingredientsData: JSON.parse(localStorage.getItem("ingredientsData")) || []
   };
 
   history.unshift(analysis);
@@ -693,7 +737,8 @@ function loadHistoryPage() {
     card.className = "info-card";
 
     card.innerHTML = `
-      <h2>${analysis.date}</h2>
+      <h2>${analysis.name || "Untitled Analysis"}</h2>
+      <p><strong>Date:</strong> ${analysis.date}</p>
       <p><strong>Target Profit:</strong> ${analysis.targetPercent}%</p>
       <p><strong>Total Profit:</strong> $${analysis.totalProfit.toFixed(2)}</p>
       <p><strong>Top Item:</strong> ${analysis.topItem}</p>
@@ -727,7 +772,9 @@ function loadSavedAnalysis(id) {
 
   localStorage.setItem("analysisResults", JSON.stringify(selected.results));
   localStorage.setItem("customerData", JSON.stringify(selected.customerData));
+  localStorage.setItem("ingredientsData", JSON.stringify(selected.ingredientsData || []));
   localStorage.setItem("targetProfitPercent", selected.targetPercent);
+  localStorage.setItem("analysisName", selected.name || "Untitled Analysis");
 
   window.location.href = "results.html";
 }
@@ -866,16 +913,19 @@ function downloadResults() {
 function removeMenuFile() {
   menuInput.value = "";
   menuFileName.textContent = "No file selected";
+  document.getElementById("removeMenuBtn").style.display = "none";
 }
 
 function removeIngredientsFile() {
   ingredientsInput.value = "";
   ingredientsFileName.textContent = "No file selected";
+  document.getElementById("removeIngredientsBtn").style.display = "none";
 }
 
 function removeCustomerFile() {
   customerInput.value = "";
   customerFileName.textContent = "No file selected";
+  document.getElementById("removeCustomerBtn").style.display = "none";
 }
 
 function loadSampleData() {
