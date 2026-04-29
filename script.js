@@ -293,16 +293,25 @@ async function goToResults() {
   try {
     if (menuInput.files.length > 0) {
       const csv = await parseCSVFile(menuInput.files[0]);
+      if (!validateCSVData(csv, ["Dish Name", "Menu Price", "Units Sold"], "Menu Items", errorText)) {
+        return;
+      }
       menuData = menuData.concat(csv);
     }
 
     if (ingredientsInput.files.length > 0) {
       const csv = await parseCSVFile(ingredientsInput.files[0]);
+      if (!validateCSVData(csv, ["Dish Name", "Ingredient Name", "Quantity Needed", "Unit Cost"], "Ingredients", errorText)) {
+        return;
+      }
       ingredientsData = ingredientsData.concat(csv);
     }
 
     if (customerInput.files.length > 0) {
       const csv = await parseCSVFile(customerInput.files[0]);
+      if (!validateCSVData(csv, ["Dish Name", "Month", "Units Sold"], "Customer Data", errorText)) {
+        return;
+      }
       customerData = customerData.concat(csv);
     }
   } catch {
@@ -478,6 +487,23 @@ function updateMenuItemDisplay(item) {
       itemBadge.style.display = "inline-block";
     } else {
       itemBadge.style.display = "none";
+    }
+  }
+
+  const profitStatusBadge = document.getElementById("profitStatusBadge");
+
+  if (profitStatusBadge) {
+    profitStatusBadge.className = "profit-status";
+
+    if (item.margin < 20) {
+      profitStatusBadge.textContent = "Low Margin";
+      profitStatusBadge.classList.add("low");
+    } else if (item.margin < 40) {
+      profitStatusBadge.textContent = "Healthy Margin";
+      profitStatusBadge.classList.add("medium");
+    } else {
+      profitStatusBadge.textContent = "High Profit";
+      profitStatusBadge.classList.add("high");
     }
   }
 
@@ -799,3 +825,56 @@ function clearAllInputs() {
 
   alert("All input data has been cleared.");
 }
+
+function downloadResults() {
+  const storedResults = localStorage.getItem("analysisResults");
+  const targetPercent = localStorage.getItem("targetProfitPercent");
+
+  if (!storedResults) {
+    alert("No results available to download.");
+    return;
+  }
+
+  const results = JSON.parse(storedResults);
+
+  let report = "Restaurant Budget Optimizer Results\n";
+  report += "Target Profit Percentage: " + targetPercent + "%\n";
+  report += "Generated: " + new Date().toLocaleString() + "\n\n";
+
+  results.forEach((item) => {
+    report += "Dish Name: " + item.dishName + "\n";
+    report += "Cost: $" + item.cost.toFixed(2) + "\n";
+    report += "Current Price: $" + item.price.toFixed(2) + "\n";
+    report += "Units Sold: " + item.unitsSold + "\n";
+    report += "Profit Per Unit: $" + item.profitPerUnit.toFixed(2) + "\n";
+    report += "Profit Margin: " + item.margin.toFixed(1) + "%\n";
+    report += "Suggested Price: $" + item.suggestedPrice.toFixed(2) + "\n";
+    report += "Total Profit: $" + item.totalProfit.toFixed(2) + "\n";
+    report += "-----------------------------------\n";
+  });
+
+  const blob = new Blob([report], { type: "text/plain" });
+  const link = document.createElement("a");
+
+  link.href = URL.createObjectURL(blob);
+  link.download = "restaurant-budget-results.txt";
+  link.click();
+
+  URL.revokeObjectURL(link.href);
+}
+
+function removeMenuFile() {
+  menuInput.value = "";
+  menuFileName.textContent = "No file selected";
+}
+
+function removeIngredientsFile() {
+  ingredientsInput.value = "";
+  ingredientsFileName.textContent = "No file selected";
+}
+
+function removeCustomerFile() {
+  customerInput.value = "";
+  customerFileName.textContent = "No file selected";
+}
+

@@ -51,6 +51,7 @@
           <label for="menuInput" class="upload-btn">Choose CSV File</label>
           <input type="file" id="menuInput" accept=".csv" hidden />
           <p id="menuFileName" class="file-name">No file selected</p>
+          <button type="button" class="remove-row-btn" onclick="removeMenuFile()">Remove File</button>
 
           <p class="csv-hint">
             Required format: Dish Name, Menu Price, Units Sold<br>
@@ -73,6 +74,7 @@
           <label for="ingredientsInput" class="upload-btn alt">Choose CSV File</label>
           <input type="file" id="ingredientsInput" accept=".csv" hidden />
           <p id="ingredientsFileName" class="file-name">No file selected</p>
+          <button type="button" class="remove-row-btn" onclick="removeIngredientsFile()">Remove File</button>
 
           <p class="csv-hint">
             Required format: Dish Name, Ingredient Name, Quantity Needed, Unit Cost<br>
@@ -95,6 +97,7 @@
           <label for="customerInput" class="upload-btn">Choose CSV File</label>
           <input type="file" id="customerInput" accept=".csv" hidden />
           <p id="customerFileName" class="file-name">No file selected</p>
+          <button type="button" class="remove-row-btn" onclick="removeCustomerFile()">Remove File</button>
 
           <p class="csv-hint">
             Required format: Dish Name, Month, Units Sold<br>
