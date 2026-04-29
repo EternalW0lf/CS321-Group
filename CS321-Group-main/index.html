@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RBO - Upload Data</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="logo.png" alt="RBO Logo" class="logo" />
+      <span class="brand-name">Restaurant Budget Optimizer</span>
+    </div>
+
+    <div class="nav-actions">
+      <span id="welcomeText" class="welcome"></span>
+
+      <button id="historyBtn" class="nav-btn" onclick="goToHistory()" style="display: none;">Past Analyses</button>
+
+      <button id="loginBtn" class="nav-btn" onclick="goToLogin()">Log In</button>
+      <button id="signupBtn" class="nav-btn signup" onclick="goToSignup()">Sign Up</button>
+
+      <button id="logoutBtn" class="nav-btn" onclick="logout()" style="display: none;">Sign Out</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="intro">
+      <h1>Welcome to Restaurant Budget Optimizer</h1>
+      <p>Analyze your menu costs, optimize pricing, and improve profitability with data-driven insights.</p>
+    </section>
+
+    <section id="uploadSection" class="main-card">
+      <h1>Upload Restaurant Data</h1>
+      <p class="subtitle">
+        Upload your restaurant files to preview menu profitability insights,
+        ingredient planning, and performance trends.
+      </p>
+
+      <div class="upload-grid">
+
+        <!-- Menu Items Card -->
+        <div class="upload-card">
+          <div class="card-badge">Menu Items</div>
+          <h2>Menu Items CSV</h2>
+          <p>
+            Upload a CSV file containing dish name, menu price, and units sold.
+          </p>
+
+          <label for="menuInput" class="upload-btn">Choose CSV File</label>
+          <input type="file" id="menuInput" accept=".csv" hidden />
+          <p id="menuFileName" class="file-name">No file selected</p>
+          <button type="button" class="remove-row-btn" onclick="removeMenuFile()">Remove File</button>
+
+          <p class="csv-hint">
+            Required format: Dish Name, Menu Price, Units Sold<br>
+            Example: Chicken Bowl, 20, 150
+          </p>
+
+          <button type="button" class="add-row-btn" onclick="addMenuRow()">+ Add Menu Item Manually</button>
+
+          <div id="manualMenuRows" class="manual-rows"></div>
+        </div>
+
+        <!-- Ingredients Card -->
+        <div class="upload-card">
+          <div class="card-badge purple">Ingredients</div>
+          <h2>Ingredients CSV</h2>
+          <p>
+            Upload a CSV file containing dish name, ingredient name, quantity needed, and unit cost.
+          </p>
+
+          <label for="ingredientsInput" class="upload-btn alt">Choose CSV File</label>
+          <input type="file" id="ingredientsInput" accept=".csv" hidden />
+          <p id="ingredientsFileName" class="file-name">No file selected</p>
+          <button type="button" class="remove-row-btn" onclick="removeIngredientsFile()">Remove File</button>
+
+          <p class="csv-hint">
+            Required format: Dish Name, Ingredient Name, Quantity Needed, Unit Cost<br>
+            Example: Chicken Bowl, Chicken, 1, 6.00
+          </p>
+
+          <button type="button" class="add-row-btn" onclick="addIngredientRow()">+ Add Ingredient Manually</button>
+
+          <div id="manualIngredientRows" class="manual-rows"></div>
+        </div>
+
+        <!-- Customer Trends Card -->
+        <div class="upload-card">
+          <div class="card-badge">Customer Trends</div>
+          <h2>Customer Data CSV</h2>
+          <p>
+            Upload a CSV file containing dish name, month, and units sold to analyze demand trends over time.
+          </p>
+
+          <label for="customerInput" class="upload-btn">Choose CSV File</label>
+          <input type="file" id="customerInput" accept=".csv" hidden />
+          <p id="customerFileName" class="file-name">No file selected</p>
+          <button type="button" class="remove-row-btn" onclick="removeCustomerFile()">Remove File</button>
+
+          <p class="csv-hint">
+            Required format: Dish Name, Month, Units Sold<br>
+            Example: Chicken Bowl, Jan, 40
+          </p>
+
+          <button type="button" class="add-row-btn" onclick="addCustomerRow()">+ Add Customer Data Manually</button>
+
+          <div id="manualCustomerRows" class="manual-rows"></div>
+        </div>
+
+      </div>
+
+      <div class="actions">
+        <input 
+          type="number" 
+          id="profitPercent" 
+          class="profit-input"
+          placeholder="Target %"
+          step="0.1"
+          min="0"
+        />
+
+        <button class="primary-btn" onclick="goToResults()">Analyze Data</button>
+        <button class="secondary-btn" onclick="clearAllInputs()">Clear All</button>
+      </div>
+
+      <p id="profitError" class="error-text"></p>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="profitLogic.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
